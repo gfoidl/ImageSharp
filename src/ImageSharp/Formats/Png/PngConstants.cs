@@ -80,24 +80,5 @@ internal static class PngConstants
     /// <summary>
     /// Gets the keyword of the XMP metadata, encoded in an iTXT chunk.
     /// </summary>
-    public static ReadOnlySpan<byte> XmpKeyword => new byte[]
-    {
-        (byte)'X',
-        (byte)'M',
-        (byte)'L',
-        (byte)':',
-        (byte)'c',
-        (byte)'o',
-        (byte)'m',
-        (byte)'.',
-        (byte)'a',
-        (byte)'d',
-        (byte)'o',
-        (byte)'b',
-        (byte)'e',
-        (byte)'.',
-        (byte)'x',
-        (byte)'m',
-        (byte)'p'
-    };
+    public static ReadOnlySpan<byte> XmpKeyword => "XML:com.adobe.xmp"u8;
 }
