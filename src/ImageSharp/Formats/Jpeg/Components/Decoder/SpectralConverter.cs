@@ -9,8 +9,22 @@ namespace SixLabors.ImageSharp.Formats.Jpeg.Components.Decoder;
 internal abstract class SpectralConverter
 {
     /// <summary>
-    /// Supported scaled spectral block sizes for scaled IDCT decoding.
+    /// Gets supported scaled spectral block sizes for scaled IDCT decoding.
     /// </summary>
+#if NET8_0_OR_GREATER
+    // The constants given via ROS<T> refer to assembly's static data segment, so no allocation occurs.
+    private static ReadOnlySpan<int> ScaledBlockSizes => new int[]
+    {
+        // 8 => 1, 1/8 of the original size
+        1,
+
+        // 8 => 2, 1/4 of the original size
+        2,
+
+        // 8 => 4, 1/2 of the original size
+        4
+    };
+#else
     private static readonly int[] ScaledBlockSizes = new int[]
     {
         // 8 => 1, 1/8 of the original size
@@ -20,8 +34,9 @@ internal abstract class SpectralConverter
         2,
 
         // 8 => 4, 1/2 of the original size
-        4,
+        4
     };
+#endif
 
     /// <summary>
     /// Gets a value indicating whether this converter has converted spectral
