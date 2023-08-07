@@ -915,7 +915,7 @@ internal class Vp8LEncoder : IDisposable
         while (i-- > 0)
         {
             int ix = tokens[i].Code;
-            if (ix is 0 or 17 or 18)
+            if (Is0Or17Or18(ix))
             {
                 trimmedLength--;   // Discount trailing zeros.
                 trailingZeroBits += codeLengthBitDepth[ix];
@@ -932,6 +932,19 @@ internal class Vp8LEncoder : IDisposable
             {
                 break;
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static bool Is0Or17Or18(int val)
+        {
+            // See comment in BufferedReadStreamExtensions on how this works.
+            const ulong magicConstant = 0x8000600000000000UL;
+
+            ulong i = (uint)val;
+            ulong shift = magicConstant << (int)i;
+            ulong mask = i - 64;
+
+            return (long)(shift & mask) < 0;
         }
 
         bool writeTrimmedLength = trimmedLength > 1 && trailingZeroBits > 12;
